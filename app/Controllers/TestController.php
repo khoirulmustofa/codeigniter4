@@ -8,8 +8,26 @@ use CodeIgniter\HTTP\ResponseInterface;
 class TestController extends BaseController
 {
 
+
+
     function index()
     {
+
+        $routes = \Config\Services::routes();
+        $getRoutes = $routes->getRoutes('GET');
+        
+        $fields3 = array();
+
+        foreach ($getRoutes as $key3 => $value3) {
+            $data3 = array();
+            $data3['route'] = $key3;
+            $data3['handler'] = $value3;
+            $fields3[] = $data3;
+        }
+
+       dd($fields3);
+
+
         // $user = auth()->user();
         // $user->addGroup('base_user');
         // echo "succes";
