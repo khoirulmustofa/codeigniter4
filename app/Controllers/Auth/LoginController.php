@@ -21,6 +21,6 @@ class LoginController extends BaseController
             return redirect()->route('auth-action-show');
         }
 
-        return view('auth.login');
+        return view('auth/login');
     }
 }

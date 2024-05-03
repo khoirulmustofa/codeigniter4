@@ -1,0 +1,1 @@
+<?= $this->extend('_layout/auth') ?>
