@@ -23,7 +23,7 @@ class AuthGroups extends ShieldAuthGroups
      * --------------------------------------------------------------------
      * The group that a newly registered user is added to.
      */
-    public string $defaultGroup = 'base_user';
+    public string $defaultGroup = 'user';
 
     /**
      * --------------------------------------------------------------------
@@ -40,28 +40,18 @@ class AuthGroups extends ShieldAuthGroups
      *
      * @see https://codeigniter4.github.io/shield/quick_start_guide/using_authorization/#change-available-groups for more info
      */
-    public array $groups = [
-        'superadmin' => [
-            'title'       => 'Super Admin',
-            'description' => 'Complete control of the site.',
-        ],
-        'admin' => [
-            'title'       => 'Admin',
-            'description' => 'Day to day administrators of the site.',
-        ],
-        'developer' => [
-            'title'       => 'Developer',
-            'description' => 'Site programmers.',
-        ],
-        'user' => [
-            'title'       => 'User',
-            'description' => 'General users of the site. Often customers.',
-        ],
-        'beta' => [
-            'title'       => 'Beta User',
-            'description' => 'Has access to beta-level features.',
-        ],
-    ];
+    public array $groups = array (
+  'administrator' => 
+  array (
+    'title' => 'Administrator',
+    'description' => '',
+  ),
+  'user' => 
+  array (
+    'title' => 'Base user',
+    'description' => '',
+  ),
+);
 
     /**
      * --------------------------------------------------------------------
@@ -72,8 +62,8 @@ class AuthGroups extends ShieldAuthGroups
      * If a permission is not listed here it cannot be used.
      */
     public array $permissions = array(
-        'dashboard' => 'dashboard',
-        'Halo' => '',
+        'dashboard.home' => 'Dashboard',
+        'menu.dashboard' => 'Menu Dashboard',
     );
 
 
@@ -85,29 +75,15 @@ class AuthGroups extends ShieldAuthGroups
      *
      * This defines group-level permissions.
      */
-    public array $matrix = [
-        'superadmin' => [
-            'admin.*',
-            'users.*',
-            'beta.*',
-        ],
-        'admin' => [
-            'admin.access',
-            'users.create',
-            'users.edit',
-            'users.delete',
-            'beta.access',
-        ],
-        'developer' => [
-            'admin.access',
-            'admin.settings',
-            'users.create',
-            'users.edit',
-            'beta.access',
-        ],
-        'user' => [],
-        'beta' => [
-            'beta.access',
-        ],
-    ];
+    public array $matrix = array (
+  'administrator' => 
+  array (
+    0 => 'dashboard.home',
+    1 => 'menu.dashboard',
+  ),
+  'user' => 
+  array (
+    0 => 'menu.dashboard',
+  ),
+);
 }

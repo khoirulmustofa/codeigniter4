@@ -10,37 +10,41 @@ class TestController extends BaseController
 
     function index()
     {
-        $faker = \Faker\Factory::create();
-        $data = [];
-        for ($i = 0; $i < 100; $i++) {
-            $isi = $faker->word;
-            $data[] = [
-                'permission' => strtolower($isi),
-                'description' => $isi
-            ];
+        // $user = auth()->user();
+        // $user->addGroup('base_user');
+        // echo "succes";
+
+        // $user = auth()->user();
+        // $user->removeGroup('base_user');
+
+
+        if (auth()->user()->can('menu.dashboard')) {
+            echo "Yes";
+        } else {
+            echo "No";
         }
-        
-       dd($data);
     }
     public function permissionToGroup()
     {
-
 
         // Mendapatkan koneksi database
         $db = \Config\Database::connect();
 
         // Mendapatkan data dari tabel group dan permissions di database
-        $groups = $db->table('groups')->get()->getResultArray();
-        $permissions = $db->table('permissions')->get()->getResultArray();
+        $groups = $db->table('auth_groups')->get()->getResultArray();
+
 
         // Membuat konten yang akan diganti dalam file AuthGroups.php
         $newMatrix = [];
         foreach ($groups as $group) {
-            $newMatrix[$group['group_name']] = [];
+            $newMatrix[$group['group']] = [];
+
+            $permissions = $db->table('auth_groups_permissions')->where("group", $group['group'])->get()->getResultArray();
+
+
             foreach ($permissions as $permission) {
-                if ($permission['group_id'] == $group['id']) {
-                    $newMatrix[$group['group_name']][] = $permission['permission_name'];
-                }
+
+                $newMatrix[$group['group']][] = $permission['permission'];
             }
         }
 
@@ -51,9 +55,9 @@ class TestController extends BaseController
         $fileContent = file_get_contents($filePath);
 
         // Menemukan bagian yang akan diganti
-        $search = "public array \$matrix = [";
+        $search = "public array \$matrix";
         $startIndex = strpos($fileContent, $search);
-        $endIndex = strpos($fileContent, "];", $startIndex) + strlen("];");
+        $endIndex = strpos($fileContent, ";", $startIndex) + strlen(";");
 
         // Mengganti konten yang akan diganti dengan data dari database
         $replace = substr($fileContent, $startIndex, $endIndex - $startIndex);
@@ -98,5 +102,43 @@ class TestController extends BaseController
         file_put_contents($filePath, $newContent);
 
         echo "Success";
+    }
+
+    public  function group()
+    {
+        // Mendapatkan koneksi database
+        $db = \Config\Database::connect();
+
+        // Mendapatkan data dari tabel auth_groups di database
+        $groups = $db->table('auth_groups')->get()->getResultArray();
+
+        // Membuat konten yang akan diganti dalam file AuthGroups.php
+        $newGroups = [];
+        foreach ($groups as $group) {
+            $newGroups[$group['group']] = [
+                'title'       => $group['title'],
+                'description' => $group['description'] ?? ""
+            ];
+        }
+
+        // Path ke file AuthGroups.php
+        $filePath = APPPATH . 'Config\AuthGroups.php';
+
+        // Membaca konten file AuthGroups.php
+        $fileContent = file_get_contents($filePath);
+
+        // Menemukan bagian yang akan diganti
+        $search = "public array \$groups";
+        $startIndex = strpos($fileContent, $search);
+        $endIndex = strpos($fileContent, ";", $startIndex) + strlen(";");
+
+        // Mengganti konten yang akan diganti dengan data dari database
+        $replace = substr($fileContent, $startIndex, $endIndex - $startIndex);
+        $newContent = str_replace($replace, "public array \$groups = " . var_export($newGroups, true) . ";", $fileContent);
+
+        // Menulis konten yang telah diperbarui kembali ke file
+        file_put_contents($filePath, $newContent);
+
+        echo 'AuthGroups.php telah diperbarui.';
     }
 }
