@@ -20,7 +20,8 @@ class LoginController extends BaseController
         if ($authenticator->hasAction()) {
             return redirect()->route('auth-action-show');
         }
+        $data['title']= "Login";
 
-        return view('auth/login');
+        return view('auth/login',$data);
     }
 }
