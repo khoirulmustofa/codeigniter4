@@ -10,7 +10,8 @@
     <title><?php echo $title ?? "Title" ?></title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/" />
-    <?= csrf_meta() ?>
+   
+    <meta name="<?= csrf_token() ?>" content="<?= csrf_hash() ?>">
 
     <link href="<?php echo base_url('vendors/bootstrap/css/bootstrap.min.css') ?>" rel="stylesheet" />
     <link rel="stylesheet" href="<?php echo base_url('vendors/fontawesome/css/all.min.css') ?>" />

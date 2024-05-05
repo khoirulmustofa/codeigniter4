@@ -8,8 +8,6 @@ use CodeIgniter\HTTP\ResponseInterface;
 class TestController extends BaseController
 {
 
-
-
     function index()
     {
 

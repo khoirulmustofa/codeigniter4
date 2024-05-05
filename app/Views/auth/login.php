@@ -42,19 +42,19 @@
                     <hr class="bg-body-secondary" />
                     <div class="divider-content-center text-center">or use email</div>
                 </div>
-                <form action="" method="post">
+                <form method="post" id="form_login">
                     <div class="mb-3 text-start">
                         <label class="form-label" for="email">Username <span class="text-danger">*</span></label>
                         <div class="input-group mb-3">
                             <span class="input-group-text"><i class="fa-regular fa-user"></i></span>
-                            <input type="text" name="email" class="form-control" placeholder="Email..." autocomplete="off">
+                            <input type="text" value="admin@admin.com" name="email" class="form-control" placeholder="Email..." autocomplete="off">
                         </div>
                     </div>
                     <div class="mb-3 text-start">
                         <label class="form-label" for="password">Password <span class="text-danger">*</span></label>
                         <div class="input-group mb-3">
                             <span class="input-group-text"><i class="fa-solid fa-key"></i></span>
-                            <input type="password" class="form-control" placeholder="Password .." autocomplete="off">
+                            <input type="password" value="http://localhost:8080/" class="form-control" placeholder="Password .." autocomplete="off">
                         </div>
                     </div>
                     <div class="d-flex justify-content-between mb-7">
@@ -76,4 +76,61 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('script_1') ?>
+<script>
+    $(document).ready(function() {
+        $('#form_login').submit(function(e) {
+            e.preventDefault(); // Prevent form submission
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="<?= csrf_token() ?>"]').attr('content')
+                }
+            });
+            // Serialize form data
+            var formData = $(this).serialize();
+
+            // AJAX POST request
+            $.ajax({
+                type: 'POST',
+                url: "<?php echo base_url('login_action') ?>",
+                data: formData,
+                dataType: 'json', // Expect JSON response
+                success: function(response) {
+                    $('meta[name="<?= csrf_token() ?>"]').attr('content', response.data.token);
+                    // Handle successful response
+                    console.log(response);
+
+
+                    if (response.success) {
+                        Swal.fire({
+                            title: "PPDB NFBS Bogor",
+                            icon: "success",
+                            html: response.message,
+                            allowEscapeKey: false,
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            timer: 2000,
+                        });
+                        window.location.replace("<?php echo base_url('dashboard')?>");
+                    } else {
+                        Swal.fire({
+                            title: "PPDB NFBS Bogor",
+                            icon: "warning",
+                            html: response.message,
+                            allowEscapeKey: false,
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            timer: 2000,
+                        });
+                    }
+
+                    // You can do further processing here
+                },
+                error: function(xhr, status, error) {
+                    // Handle error
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
 <?= $this->endSection() ?>

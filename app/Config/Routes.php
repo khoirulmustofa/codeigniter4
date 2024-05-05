@@ -16,7 +16,8 @@ $routes->group('', ['namespace' => 'App\Controllers\LandingPage'], function ($ro
     $routes->get('/', 'HomeController::index');
 });
 $routes->group('', ['namespace' => 'App\Controllers\Auth'], function ($routes) {
-    $routes->get('/login', 'LoginController::index');
+    $routes->get('/login', 'LoginController::loginView');
+    $routes->post('/login_action', 'LoginController::loginAction');
 
     $routes->get('/logout', 'LogoutController::index');
 
