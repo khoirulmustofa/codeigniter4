@@ -9,6 +9,10 @@ class HomeController extends BaseController
 {
     public function index()
     {
-        echo 'Hallo';
+        try {
+            $data['title'] = "Home";
+            return view('dashboard/home', $data);
+        } catch (\Exception $ex) {
+        }
     }
 }

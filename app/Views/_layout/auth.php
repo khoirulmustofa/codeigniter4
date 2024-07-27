@@ -10,6 +10,9 @@
     <title><?php echo $title ?? "Title" ?></title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/" />
+    <script>
+        var app_name = "<?= APP_NAME ?>";
+    </script>
    
     <meta name="<?= csrf_token() ?>" content="<?= csrf_hash() ?>">
 

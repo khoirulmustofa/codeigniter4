@@ -54,7 +54,7 @@
                         <label class="form-label" for="password">Password <span class="text-danger">*</span></label>
                         <div class="input-group mb-3">
                             <span class="input-group-text"><i class="fa-solid fa-key"></i></span>
-                            <input type="password" value="http://localhost:8080/" class="form-control" placeholder="Password .." autocomplete="off">
+                            <input type="password" value="http://localhost:8080/" name="password" class="form-control" placeholder="Password .." autocomplete="off">
                         </div>
                     </div>
                     <div class="d-flex justify-content-between mb-7">
@@ -101,26 +101,10 @@
 
 
                     if (response.success) {
-                        Swal.fire({
-                            title: "PPDB NFBS Bogor",
-                            icon: "success",
-                            html: response.message,
-                            allowEscapeKey: false,
-                            allowOutsideClick: false,
-                            showConfirmButton: false,
-                            timer: 2000,
-                        });
-                        window.location.replace("<?php echo base_url('dashboard')?>");
+                        alert_success(response.message);
+                        window.location.replace("<?php echo base_url('dashboard') ?>");
                     } else {
-                        Swal.fire({
-                            title: "PPDB NFBS Bogor",
-                            icon: "warning",
-                            html: response.message,
-                            allowEscapeKey: false,
-                            allowOutsideClick: false,
-                            showConfirmButton: false,
-                            timer: 2000,
-                        });
+                        alert_warning(response.message);
                     }
 
                     // You can do further processing here

@@ -36,7 +36,7 @@ class LoginController extends BaseController
         if (!$this->validateData($this->request->getPost(), $rules, [], config('Auth')->DBGroup)) {
             // return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
               
-            return $this->setRespon($response,true,$this->validator->listErrors());
+            return $this->setRespon($response,false,$this->validator->listErrors());
         }
 
         /** @var array $credentials */
